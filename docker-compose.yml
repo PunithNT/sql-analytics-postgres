@@ -1,0 +1,22 @@
+services:
+  db:
+    image: postgres:16
+    container_name: sql-analytics-postgres
+    environment:
+      POSTGRES_DB: nyc311
+      POSTGRES_USER: analytics
+      POSTGRES_PASSWORD: analytics
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./sql:/docker-entrypoint-initdb.d:ro
+      - ./data:/data:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U analytics -d nyc311"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  pgdata:

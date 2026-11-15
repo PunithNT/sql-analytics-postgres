@@ -1,0 +1,31 @@
+-- 02_load_notes.sql
+-- Loading is via the Python loader, not via a SQL COPY in this repo.
+--
+-- Why: the same CSV needs to work in three places:
+--   1. Docker Postgres (this file documents the server side option)
+--   2. Local Postgres without giving psql a host file path
+--   3. The zero setup SQLite demo in src/load_and_run.py
+--
+-- Option A, Docker / server side COPY (run inside the container
+-- after the CSV is mounted or copied in):
+--
+--   \copy requests_311 (unique_key, created_date, closed_date, agency,
+--       complaint_type, descriptor, borough, status, resolution_hours)
+--     FROM 'data/requests_311.csv' WITH (FORMAT csv, HEADER true, NULL '')
+--
+-- Option B, recommended for this repo: use the Python loader.
+-- For SQLite (no server needed):
+--
+--   python src/generate_data.py
+--   python src/load_and_run.py
+--
+-- For Postgres with psycopg installed, load with a small Python
+-- script using csv + executemany against the table created by
+-- 01_schema.sql, converting empty closed_date and resolution_hours
+-- values to NULL. See README for the full quickstart.
+--
+-- Real NYC Open Data CSV: the export uses different header casing
+-- (for example "Unique Key", "Created Date"). Rename its columns
+-- to the snake_case names in 01_schema.sql before loading.
+-- This file intentionally contains no executable statements.
+SELECT 1 WHERE FALSE;

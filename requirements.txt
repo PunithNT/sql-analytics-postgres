@@ -1,0 +1,4 @@
+pandas>=2.0
+pytest>=8.0
+# Optional, only needed if you load data into Postgres from Python:
+# psycopg[binary]>=3.1
